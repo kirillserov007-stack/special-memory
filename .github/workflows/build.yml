@@ -1,3 +1,4 @@
+
 name: Build Blocks Stafn APK
 
 on:
@@ -19,6 +20,7 @@ jobs:
         with:
           command: buildozer android debug
           workdir: .
+          docker_image: ghcr.io/kivy/buildozer:latest
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
