@@ -1,24 +1,27 @@
-[app]
-title = Blocks Stafn
-package.name = blocksstafn
-package.domain = org.stafn
-source.dir = .
-source.include_exts = py,png,jpg,jpeg,kv,json,atlas,txt
-version = 1.3
-requirements = python3,kivy
-orientation = portrait
-fullscreen = 1
+name: Build Blocks Stafn APK
 
-# Интернет нужен только для необязательной онлайн-таблицы лидеров.
-android.permissions = INTERNET
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
-# Совместимость с современными Android.
-android.api = 35
-android.minapi = 23
-android.ndk = 27c
-android.archs = arm64-v8a
-android.accept_sdk_license = True
+jobs:
+  build:
+    runs-on: ubuntu-22.04
 
-[buildozer]
-log_level = 2
-warn_on_root = 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build APK
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          command: buildozer android debug
+          workdir: .
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Blocks-Stafn-APK
+          path: bin/*.apk
